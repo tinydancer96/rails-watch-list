@@ -5,4 +5,8 @@ Rails.application.routes.draw do
   # root "articles#index"
   get "movies", to: "movies#index"
   get "movies/:id", to: "movies#show", as: :movie
+
+  resources :lists, except: [:delete, :edit, :update] do
+    resources :bookmarks, only: [:new, :create]
+  end
 end
