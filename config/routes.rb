@@ -7,6 +7,8 @@ Rails.application.routes.draw do
   get "movies/:id", to: "movies#show", as: :movie
 
   resources :lists do
-    resources :bookmarks
+    resources :bookmarks, only: [:new, :create]
   end
+
+  resources :bookmarks, only: :destroy
 end
