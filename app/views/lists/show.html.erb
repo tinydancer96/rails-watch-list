@@ -1,22 +1,37 @@
-<h1><%= @list.name %></h1>
-
 <div class="container">
+  <h1 class="text-center"><%= @list.name %></h1>
   <div class="row">
+    <% @list.movies.each do |movie| %>
       <div class="col-md-6">
-        <div class="d-flex flex-column">
-          <% @list.movies.each do |movie|%>
-          <% bookmark = Bookmark.find_by(list: @list, movie: movie) %>
-            <h1><%= movie.title %></h1>
-            <p><%= movie.overview %></p>
-            <p>Rating: <%= movie.rating %>/10</p>
-            <img src="<%= movie.poster_url %>" alt="Movie Poster" class="img-fluid" style="height: 400px; width: 300px;">
-            <%= link_to "delete", bookmark_path(bookmark), data: { turbo_method: :delete, turbo_confirm: "Are you sure you want to remove this bookmark?"}, class: 'btn btn-danger' %>
-          <% end %>
+        <div class="card mb-4">
+          <div class="card-body">
+            <% bookmark = Bookmark.find_by(list: @list, movie: movie) %>
+            <div class="row">
+              <div class="col-md-4">
+                <img src="<%= movie.poster_url %>" alt="Movie Poster" class="img-fluid" style="max-height: 400px; width: 100%;">
+              </div>
+              <div class="col-md-8">
+                <h2 class="card-title"><%= movie.title %></h2>
+                <p class="card-text"><%= movie.overview %></p>
+                <p class="card-text"><%= bookmark.comment %></p>
+                <p class="card-text">Rating: <%= movie.rating %>/10</p>
+                <div>
+                  <%= link_to "delete bookmark", bookmark_path(bookmark), data: { turbo_method: :delete, turbo_confirm: "Are you sure you want to remove this bookmark?" } %>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
+    <% end %>
   </div>
 </div>
-  <%= link_to "delete this list", list_path(@list), data: { turbo_method: :delete, turbo_confirm: "Are you sure you want to remove this list?"}, class: 'btn btn-danger' %>
 
-<%= link_to "Back to lists", lists_path %>
-<button><%= link_to "Add new bookmark", new_list_bookmark_path(@list) %></button>
+<div class="container text-center">
+  <br>
+  <ul class="list-inline">
+    <li class="list-inline-item"><%= link_to "Back to lists", lists_path %></li>
+    <li class="list-inline-item"><%= link_to "Add new bookmark", new_list_bookmark_path(@list)%></li>
+    <li class="list-inline-item"><%= link_to "delete this list", list_path(@list), data: { turbo_method: :delete, turbo_confirm: "Are you sure you want to remove this list?" }%></li>
+  </ul>
+</div>
